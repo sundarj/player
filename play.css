@@ -1,0 +1,9 @@
+*, *::before, *::after { box-sizing: inherit }
+html { box-sizing: border-box }
+
+body {
+    margin: 0;
+    font: 100%/1.4 sans-serif;
+}
+
+iframe { display: none }
