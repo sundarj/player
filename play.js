@@ -4,7 +4,8 @@ window.onload = function () {
     ui.main = document.querySelector('main');
     ui.select = document.getElementById('select-template').querySelector('form');
     ui.playlist = document.getElementById('playlist-template').querySelector('div');
-
+    ui.header = document.querySelector('.page-head');
+    
     api.authorize().then(letsParty);
 }
 
@@ -39,6 +40,8 @@ elt.prototype.prop = function (properties, value) {
 
 function letsParty(playlists) {
     var form = ui.select.cloneNode(true);
+    var previousSelection = JSON.parse(localStorage['player.previousSelection']);
+    
     playlists.forEach(function (playlist) {
         var snippet = playlist.snippet;
 
@@ -46,26 +49,32 @@ function letsParty(playlists) {
             type: 'checkbox',
             id: playlist.id,
             name: playlist.id
-        }).node;
+        }).prop('checked', ~previousSelection.indexOf(playlist.id)).node;
         var label = elt('label').prop({
-            innerHTML: snippet.title,
+            innerHTML: `<span>${snippet.title}</span>`,
             htmlFor: playlist.id
         }).node;
 
         form.appendChild(label).appendChild(checkbox);
     });
 
-    form.appendChild(elt('button').attr('type', 'submit').prop('innerHTML', '&#10004;').node);
-    ui.main.appendChild(form);
+    form.appendChild(elt('button').attr('type', 'submit').prop('innerHTML', '&#9658;').node);
+    ui.header.appendChild(form);
 
     form.onsubmit = function (e) {
         e.preventDefault();
+        
+        this.querySelector('button').disabled = true;
+        this.classList.add('loading');
+    
 
         var selected = Array.from(this.querySelectorAll('input')).filter(function (check) {
             return check.checked;
         }).map(function (check) {
             return check.name;
         });
+        
+        localStorage['player.previousSelection'] = JSON.stringify(selected);
 
         startTheMusic(selected);
     };
@@ -107,6 +116,8 @@ HTMLDivElement.prototype.play = function (durations, index) {
     iframe.src = iframe.dataset['src'] + '?autoplay=1';
     this.classList.add('is-playing');
     
+    document.title = this.querySelector('h2').textContent;
+    
     var self = this;
     
     setTimeout(function () {
@@ -133,7 +144,9 @@ function startTheMusic(ids) {
         return Promise.all(videoIDs.map(api.videoInfo));
     }).then(function (videos) {
         var titles = [], durations = [];
-        videos.forEach(function (video) {
+        videos.filter(function (video) {
+            return video.length;
+        }).forEach(function (video) {
             titles.push(video[0].snippet.title);
             durations.push(video[0].contentDetails.duration);
         });
@@ -146,5 +159,6 @@ function startTheMusic(ids) {
         
         ui.main.appendChild(container);
         container.querySelector('div').play(durations, 0);
+        document.querySelector('form').classList.remove('loading');
     });
 }

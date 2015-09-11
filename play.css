@@ -1,9 +1,99 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+
 *, *::before, *::after { box-sizing: inherit }
 html { box-sizing: border-box }
 
 body {
     margin: 0;
-    font: 100%/1.4 sans-serif;
+    font: 100%/1.4 'Lato', sans-serif;
+    text-align: center;
+    padding: 1em;
+    background: #fbfbfb;
+    color: #1f1f1f;
+}
+    a {
+        color: #bbb;
+        text-decoration: none;
+        transition: color .5s, padding .5s;
+    }
+
+    .is-playing a {
+        color: inherit;
+        font-size: 1.1em;
+        padding: .1em;
+     }
+
+.page-head {
+    padding: 5%;
+    max-width: 30em;
+    margin: 0 auto;
 }
 
+h1 {
+    margin-bottom: 3em;
+}
+
+label {
+    display: block;
+    padding: 1em;
+    margin: 1em;
+    background: #f1f1f1;
+    position: relative;
+    cursor: pointer;
+}
+
+    label:hover, label:focus {
+        box-shadow: 0px 0px 2px 0px rgba(31,31,31,0.6);
+    }
+
+    input {
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        top: 50%;
+        margin-top: -5px;
+    }
+
+    label span { display: inline-block; vertical-align: middle }
+
+    input::after {
+        content: '';
+        margin-left: .5em;
+        outline: 1px solid silver;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        transition: background .3s;
+    }
+
+    input:checked::after {
+        background: #1f1f1f;
+        outline: 0;
+    }
+
+    button {
+        outline: 0;
+        background: 0;
+        border: 0;
+        font-size: 2em;
+        padding: 1em;
+        color: #1f1f1f;
+        cursor: pointer;
+        width: 100%;
+    }
+
+        .loading button {
+            animation: load 1.7s ease-in-out infinite;
+        }
+
 iframe { display: none }
+
+@keyframes load {
+
+    from {
+        transform: rotate(0deg);
+    } to {
+        transform: rotate(360deg);
+    }
+
+}
