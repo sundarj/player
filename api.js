@@ -3,6 +3,10 @@
 (function (self, document) {
 
     var api = self.api = {};
+    
+    if (self.location.hash === '#!') {
+        return self.location = '/';
+    }
 
     const root_uri = 'https://accounts.google.com/o/oauth2/auth';
     const client_id = '263620315741-c4t4ngtiikfff7cfkth34mgedhgv0c6k.apps.googleusercontent.com';
@@ -19,7 +23,6 @@
     var access_token = self.location.hash.slice('#access_token='.length);
     access_token = ~access_token.indexOf("&") ? access_token.split("&")[0] : access_token;
 
-    var ui = {};
 
     if (!access_token)
         authenticate();
@@ -101,9 +104,9 @@
     }
     
     const video_uri = 'https://www.googleapis.com/youtube/v3/videos';
-    const video_args = '?part=snippet&fields=items(snippet/title)';
+    const video_args = '?part=snippet,contentDetails&fields=items(contentDetails/duration,snippet/title)';
     
-    api.videoSnippet = function (id) {
+    api.videoInfo = function (id) {
         return fetch(`${video_uri + video_args}&id=${id}`, authHead)
             .then(jsonify)
             .then(itemize)
