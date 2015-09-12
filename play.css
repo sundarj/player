@@ -16,6 +16,8 @@ body {
         text-decoration: none;
         transition: color .5s, padding .5s;
     }
+    
+        a:hover { color: inherit }
 
     .is-playing a {
         color: inherit;
@@ -86,7 +88,24 @@ label {
             animation: load 1.7s ease-in-out infinite;
         }
 
-iframe { display: none }
+iframe {
+    width: 1280px;
+    height: 0%;
+    position: absolute;
+    left: -999em;
+    transition: height .4s;
+}
+    iframe.revealed {
+        height: 720px;
+        position: static;
+    }
+
+h2 span {
+    margin-left: 10px;
+}
+    h2 span:empty {
+        margin: 0
+    }
 
 @keyframes load {
 

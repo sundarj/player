@@ -70,7 +70,7 @@
             });
     }
     
-    function flatten(array) {
+    const flatten = api.flatten = function(array) {
         return array.reduce(function (i, j) {
             if (Array.isArray(j))
                 j = flatten(j);
@@ -106,10 +106,11 @@
     const video_uri = 'https://www.googleapis.com/youtube/v3/videos';
     const video_args = '?part=snippet,contentDetails&fields=items(contentDetails/duration,snippet/title)';
     
-    api.videoInfo = function (id) {
-        return fetch(`${video_uri + video_args}&id=${id}`, authHead)
+    api.videoInfo = function (ids) {
+        return fetch(`${video_uri + video_args}&id=${escape(ids.toString())}`, authHead)
             .then(jsonify)
             .then(itemize)
+        
     }
 
 })(this, this.document);
