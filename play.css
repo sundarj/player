@@ -25,6 +25,11 @@ body {
         padding: .1em;
      }
 
+main {
+    max-width: 60em;
+    margin: 0 auto;
+}
+
 .page-head {
     padding: 5%;
     max-width: 30em;
@@ -88,17 +93,27 @@ label {
             animation: load 1.7s ease-in-out infinite;
         }
 
-iframe {
-    width: 1280px;
-    height: 0%;
-    position: absolute;
-    left: -999em;
-    transition: height .4s;
+.video-wrapper {
+    position: relative;
+    padding: 0;
+    height: 0;
 }
-    iframe.revealed {
-        height: 720px;
-        position: static;
+    .video-wrapper.revealed {
+        padding-bottom: 56.25%;
     }
+
+    iframe {
+        width: 100%;
+        height: 0%;
+        position: absolute;
+        left: -999em;
+        top: 0;
+        transition: height .4s;
+    }
+        .revealed iframe {
+            height: 100%;
+            left: 0;
+        }
 
 h2 span {
     margin-left: 10px;

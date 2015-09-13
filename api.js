@@ -104,7 +104,7 @@
     }
     
     const video_uri = 'https://www.googleapis.com/youtube/v3/videos';
-    const video_args = '?part=snippet,contentDetails&fields=items(contentDetails/duration,snippet/title)';
+    const video_args = '?part=snippet&fields=items(snippet/title)';
     
     api.videoInfo = function (ids) {
         return fetch(`${video_uri + video_args}&id=${escape(ids.toString())}`, authHead)
