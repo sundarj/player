@@ -111,8 +111,6 @@ function grouped(array, size) {
 var player;
 
 function ytStateChange(evt, next) {
-    console.log(evt);
-
     if (evt.data !== YT.PlayerState.ENDED)
         return
 
