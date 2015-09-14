@@ -5,7 +5,7 @@
     var api = self.api = {};
     
     if (self.location.hash === '#!') {
-        return self.location = '/';
+        return self.location = self.location.href.slice(0,-2);
     }
 
     const root_uri = 'https://accounts.google.com/o/oauth2/auth';

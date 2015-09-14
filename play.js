@@ -40,7 +40,7 @@ elt.prototype.prop = function (properties, value) {
 
 function letsParty(playlists) {
     var form = ui.select.cloneNode(true);
-    var previousSelection = JSON.parse(localStorage['player.previousSelection']);
+    var previousSelection = localStorage['player.previousSelection'] || [];
     
     playlists.forEach(function (playlist) {
         var snippet = playlist.snippet;
