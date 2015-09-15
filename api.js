@@ -4,9 +4,8 @@
 
     var api = self.api = {};
     
-    if (self.location.hash === '#!') {
+    if (self.location.hash === '#!')
         return self.location = self.location.href.slice(0,-2);
-    }
 
     const root_uri = 'https://accounts.google.com/o/oauth2/auth';
     const client_id = '263620315741-c4t4ngtiikfff7cfkth34mgedhgv0c6k.apps.googleusercontent.com';

@@ -113,6 +113,10 @@ var player;
 function ytStateChange(evt, next) {
     if (evt.data !== YT.PlayerState.ENDED)
         return
+        
+    if (typeof next === 'object' && 
+        next.data === 150) // copyright takedown
+        next = null;
 
     var playing = document.querySelector('.is-playing');
 
@@ -123,7 +127,7 @@ function ytStateChange(evt, next) {
 
     next = next || document.querySelector('.is-playing')
     .nextElementSibling;
-
+    
     var wrapper = next.querySelector('.video-wrapper');
     var iframe = document.getElementById('player');
     wrapper.appendChild(iframe);
@@ -135,7 +139,8 @@ function ytStateChange(evt, next) {
     player = new YT.Player('player', {
         events: {
             onReady: ytReady,
-            onStateChange: ytStateChange
+            onStateChange: ytStateChange,
+            onError: ytStateChange
         }
     });
 };
@@ -213,7 +218,8 @@ function startTheMusic(ids) {
             videoId: wrapper.dataset['id'],
             events: {
                 onReady: ytReady,
-                onStateChange: ytStateChange
+                onStateChange: ytStateChange,
+                onError: ytStateChange.bind(null, { data: YT.PlayerState.ENDED })
             }
         });
         
