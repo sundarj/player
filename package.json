@@ -1,0 +1,41 @@
+{
+  "name": "@j.su/player",
+  "version": "1.0.0",
+  "description": "youtube playlist player",
+  "main": "use/scripts/bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:js": "browserify -e use/scripts/main.js -o use/scripts/bundle.js"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sundarj/player.git"
+  },
+  "keywords": [
+    "youtube",
+    "player",
+    "sundarj",
+    "yo-yo",
+    "api"
+  ],
+  "author": "Sundar Joshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sundarj/player/issues"
+  },
+  "homepage": "https://github.com/sundarj/player#readme",
+  "dependencies": {
+    "yo-yo": "^1.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.10.3",
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1"
+  }
+}
