@@ -5,7 +5,10 @@
   "main": "use/scripts/bundle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:js": "browserify -e use/scripts/main.js -o use/scripts/bundle.js"
+    "build:js": "browserify -e use/scripts/main.js -o use/scripts/bundle.js",
+    "watch:js": "watchify -e use/scripts/main.js -o use/scripts/bundle.js",
+    "serve": "lite-server",
+    "dev": "npm-run-all --parallel watch:js serve"
   },
   "browserify": {
     "transform": [
@@ -33,9 +36,14 @@
     "yo-yo": "^1.2.1"
   },
   "devDependencies": {
+    "babel-plugin-async-to-promises": "^1.0.5",
+    "babel-plugin-syntax-async-functions": "^6.8.0",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.10.3",
     "babelify": "^7.3.0",
-    "browserify": "^13.0.1"
+    "browserify": "^13.0.1",
+    "lite-server": "^2.2.2",
+    "npm-run-all": "^2.3.0",
+    "watchify": "^3.7.0"
   }
 }

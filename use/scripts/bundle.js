@@ -1079,22 +1079,120 @@ module.exports = [
 ]
 
 },{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&fields=items(snippet(channelId%2Ctitle))&key={YOUR_API_KEY}
+
+exports.default = Promise.resolve({
+  items: [{
+    snippet: {
+      channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
+      title: "エム・ゼット"
+    }
+  }, {
+    snippet: {
+      channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
+      title: "MZ2"
+    }
+  }, {
+    snippet: {
+      channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
+      title: "MZ"
+    }
+  }, {
+    snippet: {
+      channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
+      title: "Favourites"
+    }
+  }, {
+    snippet: {
+      channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
+      title: "Pokélyrics"
+    }
+  }]
+});
+
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _yoYo = require('yo-yo');
 
 var _yoYo2 = _interopRequireDefault(_yoYo);
 
+var _list = require('./list');
+
+var _list2 = _interopRequireDefault(_list);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = yo`
-    <main>
-    
-    </main>
-`;
+exports.default = _ => {
+  return Promise.resolve().then(function () {
+    return (0, _list2.default)();
+  }).then(function (_resp) {
+    return _yoYo2.default`
+  <div>
+    <aside>${ _resp }</aside>
+    <div></div>
+  </div>
+  `;
+  });
+};
 
-},{"yo-yo":7}]},{},[9]);
+},{"./list":11,"yo-yo":7}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _yoYo = require('yo-yo');
+
+var _yoYo2 = _interopRequireDefault(_yoYo);
+
+var _list = require('../api/list');
+
+var _list2 = _interopRequireDefault(_list);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _ => {
+  return Promise.resolve().then(function () {
+    return _list2.default;
+  }).then(function (_resp) {
+    const { items } = _resp;
+
+    return _yoYo2.default`
+    <nav am-List>
+      ${ items.map(({ snippet }) => _yoYo2.default`
+        <a rel=history href=${ snippet.title }>${ snippet.title }</li>
+      `) }
+    </nav>
+  `;
+  });
+};
+
+},{"../api/list":9,"yo-yo":7}],12:[function(require,module,exports){
+'use strict';
+
+var _index = require('./components/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+window.player = function player({ el }) {
+  return Promise.resolve().then(function () {
+    return (0, _index2.default)();
+  }).then(function (_resp) {
+    el.appendChild(_resp);
+  });
+};
+
+},{"./components/index":10}]},{},[12]);

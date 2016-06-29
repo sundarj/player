@@ -1,7 +1,5 @@
-import render from 'yo-yo'
+import index from './components/index'
 
-export default render`
-    <main>
-    
-    </main>
-`
+window.player = async function player({ el }) {
+  el.appendChild( await index() )
+}
