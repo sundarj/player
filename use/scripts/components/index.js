@@ -3,9 +3,9 @@ import list from './list'
 
 export default async _ => {
   return yo`
-  <div>
-    <aside>${ await list() }</aside>
-    <div></div>
+  <div am-Content>
+    <aside am-List>${ await list() }</aside>
+    <div am-View></div>
   </div>
   `
   }
