@@ -3447,9 +3447,15 @@ var _bus = require('../bus');
 
 var _bus2 = _interopRequireDefault(_bus);
 
+var _history = require('../history');
+
+var _history2 = _interopRequireDefault(_history);
+
 var _util = require('../util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const currentLocation = _history2.default.getCurrentLocation().pathname.slice(1);
 
 exports.default = _ => {
   return Promise.resolve().then(function () {
@@ -3460,7 +3466,9 @@ exports.default = _ => {
     return _yoYo2.default`
     <nav onclick=${ emitHistory }>
       ${ items.map(({ snippet }) => _yoYo2.default`
-        <a rel=history href=${ snippet.title }>${ snippet.title }</li>
+        <a rel=history href=${ snippet.title }
+          aria-selected=${ currentLocation === snippet.title }
+        >${ snippet.title }</li>
       `) }
     </nav>
   `;
@@ -3470,10 +3478,16 @@ exports.default = _ => {
 function emitHistory(event) {
   event.preventDefault();
 
-  _bus2.default.dispatch('historychange', { pathname: (0, _util.normalisePathname)(event.target.pathname) });
+  const target = event.target;
+
+  _bus2.default.dispatch('historychange', { pathname: (0, _util.normalisePathname)(target.pathname) });
+
+  for (const link of event.currentTarget.children) {
+    link.setAttribute('aria-selected', link === target);
+  }
 }
 
-},{"../api/list":47,"../bus":48,"../util":54,"yo-yo":45}],51:[function(require,module,exports){
+},{"../api/list":47,"../bus":48,"../history":51,"../util":54,"yo-yo":45}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
