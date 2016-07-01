@@ -3390,6 +3390,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _eventBus = require('./lib/event-bus');
+
+var _eventBus2 = _interopRequireDefault(_eventBus);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = new _eventBus2.default();
+
+},{"./lib/event-bus":52}],49:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _yoYo = require('yo-yo');
 
 var _yoYo2 = _interopRequireDefault(_yoYo);
@@ -3413,7 +3428,7 @@ exports.default = _ => {
   });
 };
 
-},{"./list":49,"yo-yo":45}],49:[function(require,module,exports){
+},{"./list":50,"yo-yo":45}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3428,6 +3443,12 @@ var _list = require('../api/list');
 
 var _list2 = _interopRequireDefault(_list);
 
+var _bus = require('../bus');
+
+var _bus2 = _interopRequireDefault(_bus);
+
+var _util = require('../util');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _ => {
@@ -3437,7 +3458,7 @@ exports.default = _ => {
     const { items } = _resp;
 
     return _yoYo2.default`
-    <nav>
+    <nav onclick=${ emitHistory }>
       ${ items.map(({ snippet }) => _yoYo2.default`
         <a rel=history href=${ snippet.title }>${ snippet.title }</li>
       `) }
@@ -3446,7 +3467,13 @@ exports.default = _ => {
   });
 };
 
-},{"../api/list":47,"yo-yo":45}],50:[function(require,module,exports){
+function emitHistory(event) {
+  event.preventDefault();
+
+  _bus2.default.dispatch('historychange', { pathname: (0, _util.normalisePathname)(event.target.pathname) });
+}
+
+},{"../api/list":47,"../bus":48,"../util":54,"yo-yo":45}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3457,7 +3484,32 @@ var _history = require('history');
 
 exports.default = (0, _history.createHistory)();
 
-},{"history":32}],51:[function(require,module,exports){
+},{"history":32}],52:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+class EventBus {
+  constructor() {
+    this._bus = document.createElement('span');
+  }
+
+  listen(type, listener) {
+    const fn = ({ detail }) => listener(detail);
+
+    this._bus.addEventListener(type, fn);
+
+    return _ => this._bus.removeEventListener(type, fn);
+  }
+
+  dispatch(type, detail) {
+    this._bus.dispatchEvent(new CustomEvent(type, { detail }));
+  }
+}
+exports.default = EventBus;
+
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var _index = require('./components/index');
@@ -3467,6 +3519,10 @@ var _index2 = _interopRequireDefault(_index);
 var _history = require('./history');
 
 var _history2 = _interopRequireDefault(_history);
+
+var _bus = require('./bus');
+
+var _bus2 = _interopRequireDefault(_bus);
 
 require('dom-elements');
 
@@ -3478,28 +3534,21 @@ window.player = function player({ el }) {
   }).then(function (_resp) {
     const view = _resp;
 
-    enableHistory(view.queryAll('[rel=history]'));
     el.appendChild(view);
   });
 };
 
-function enableHistory(elements) {
-  const nodeName = elements[0].nodeName;
+_bus2.default.listen('historychange', ({ pathname }) => _history2.default.push({ pathname }));
 
-  window.addEventListener('click', event => {
-    const target = event.target;
-    if (target.nodeName !== nodeName || !elements.includes(target)) return;
+},{"./bus":48,"./components/index":49,"./history":51,"dom-elements":5}],54:[function(require,module,exports){
+'use strict';
 
-    event.preventDefault();
-
-    _history2.default.push({
-      pathname: normalisePathname(target.pathname)
-    });
-  }, true);
-}
-
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.normalisePathname = normalisePathname;
 function normalisePathname(pathname) {
   return pathname[0] === '/' ? pathname : '/' + pathname;
 }
 
-},{"./components/index":48,"./history":50,"dom-elements":5}]},{},[51]);
+},{}]},{},[53]);
