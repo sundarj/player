@@ -1,18 +1,18 @@
-import yo from 'yo-yo'
-import api from '../api/list'
+import html from 'yo-yo'
+import API from '../api/list'
 import bus from '../bus'
 import history from '../history'
 import { normalisePathname } from '../util'
 
 const currentLocation = history.getCurrentLocation().pathname.slice(1)
 
-export default async _ => {
-  const { items } = await api
+export default async function List() {
+  const { items } = await API
 
-  return yo`
+  return html`
     <nav onclick=${ emitHistory }>
-      ${items.map( ({ snippet }) => yo`
-        <a rel=history href=${ snippet.title }
+      ${items.map( ({ id, snippet }) => html`
+        <a data-list=${ id } href=${ snippet.title }
           aria-selected=${ currentLocation === snippet.title  }
         >${ snippet.title }</li>
       `)}
@@ -24,7 +24,10 @@ function emitHistory( event ) {
   event.preventDefault()
   const { target } = event
 
-  bus.dispatch( 'historychange', { pathname: normalisePathname(target.pathname) } )
+  bus.dispatch( 'historychange', {
+    pathname: normalisePathname(target.pathname),
+    params: target.dataset,
+  })
 
   for ( const link of event.currentTarget.children ) {
     link.setAttribute( 'aria-selected', link === target )

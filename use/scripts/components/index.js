@@ -1,10 +1,10 @@
-import yo from 'yo-yo'
-import list from './list'
+import html from 'yo-yo'
+import List from './list'
 
-export default async _ => {
-  return yo`
+export default async function Index() {
+  return html`
   <div am-Content>
-    <aside am-List>${ await list() }</aside>
+    <aside am-List>${ await List() }</aside>
     <div am-View></div>
   </div>
   `
