@@ -3477,8 +3477,7 @@ exports.default = _ => {
 
 function emitHistory(event) {
   event.preventDefault();
-
-  const target = event.target;
+  const { target } = event;
 
   _bus2.default.dispatch('historychange', { pathname: (0, _util.normalisePathname)(target.pathname) });
 

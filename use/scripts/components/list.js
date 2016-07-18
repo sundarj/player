@@ -22,8 +22,7 @@ export default async _ => {
 
 function emitHistory( event ) {
   event.preventDefault()
-
-  const target = event.target
+  const { target } = event
 
   bus.dispatch( 'historychange', { pathname: normalisePathname(target.pathname) } )
 
