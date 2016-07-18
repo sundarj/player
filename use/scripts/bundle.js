@@ -3352,30 +3352,35 @@ module.exports = [
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-// https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&fields=items(snippet(channelId%2Ctitle))&key={YOUR_API_KEY}
+// https://www.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&fields=items(id%2Csnippet(channelId%2Ctitle))&key={YOUR_API_KEY}
 
 exports.default = Promise.resolve({
   items: [{
+    id: "PLTbXjF9OlqUxafW7FxLxPw0kN636aMrrl",
     snippet: {
       channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
       title: "エム・ゼット"
     }
   }, {
+    id: "PLTbXjF9OlqUyx_2H3UHc2n7HnKzMg2KKy",
     snippet: {
       channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
       title: "MZ2"
     }
   }, {
+    id: "PLTbXjF9OlqUy6dbnoW32xiOBBYansoIvB",
     snippet: {
       channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
       title: "MZ"
     }
   }, {
+    id: "FLwCkDyegk_ZyXcUK91xLKTg",
     snippet: {
       channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
       title: "Favourites"
     }
   }, {
+    id: "PLTbXjF9OlqUw5qKBNL_sKnISNyuWMuUn4",
     snippet: {
       channelId: "UCwCkDyegk_ZyXcUK91xLKTg",
       title: "Pokélyrics"
@@ -3415,7 +3420,7 @@ var _list2 = _interopRequireDefault(_list);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _ => {
+exports.default = function Index() {
   return Promise.resolve().then(function () {
     return (0, _list2.default)();
   }).then(function (_resp) {
@@ -3457,7 +3462,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const currentLocation = _history2.default.getCurrentLocation().pathname.slice(1);
 
-exports.default = _ => {
+exports.default = function List() {
   return Promise.resolve().then(function () {
     return _list2.default;
   }).then(function (_resp) {
@@ -3465,8 +3470,8 @@ exports.default = _ => {
 
     return _yoYo2.default`
     <nav onclick=${ emitHistory }>
-      ${ items.map(({ snippet }) => _yoYo2.default`
-        <a rel=history href=${ snippet.title }
+      ${ items.map(({ id, snippet }) => _yoYo2.default`
+        <a data-list=${ id } href=${ snippet.title }
           aria-selected=${ currentLocation === snippet.title }
         >${ snippet.title }</li>
       `) }
@@ -3479,7 +3484,10 @@ function emitHistory(event) {
   event.preventDefault();
   const { target } = event;
 
-  _bus2.default.dispatch('historychange', { pathname: (0, _util.normalisePathname)(target.pathname) });
+  _bus2.default.dispatch('historychange', {
+    pathname: (0, _util.normalisePathname)(target.pathname),
+    params: target.dataset
+  });
 
   for (const link of event.currentTarget.children) {
     link.setAttribute('aria-selected', link === target);
