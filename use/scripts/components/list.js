@@ -22,14 +22,15 @@ export default async function List() {
 
 function emitHistory( event ) {
   event.preventDefault()
-  const { target } = event
+  const { target, currentTarget } = event
+  const { pathname, dataset } = target
 
   bus.dispatch( 'historychange', {
-    pathname: normalisePathname(target.pathname),
-    params: target.dataset,
+    pathname: normalisePathname( pathname ),
+    params: dataset,
   })
 
-  for ( const link of event.currentTarget.children ) {
+  for ( const link of currentTarget.children ) {
     link.setAttribute( 'aria-selected', link === target )
   }
 }

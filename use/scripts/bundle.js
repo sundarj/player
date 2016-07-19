@@ -3482,14 +3482,15 @@ exports.default = function List() {
 
 function emitHistory(event) {
   event.preventDefault();
-  const { target } = event;
+  const { target, currentTarget } = event;
+  const { pathname, dataset } = target;
 
   _bus2.default.dispatch('historychange', {
-    pathname: (0, _util.normalisePathname)(target.pathname),
-    params: target.dataset
+    pathname: (0, _util.normalisePathname)(pathname),
+    params: dataset
   });
 
-  for (const link of event.currentTarget.children) {
+  for (const link of currentTarget.children) {
     link.setAttribute('aria-selected', link === target);
   }
 }
