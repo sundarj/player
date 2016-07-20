@@ -6,9 +6,7 @@ import { normalisePathname } from '../util'
 
 const currentLocation = history.getCurrentLocation().pathname.slice(1)
 
-export default async function List() {
-  const { items } = await API
-
+export default function List({ items }) {
   return html`
     <nav onclick=${ emitHistory }>
       ${items.map( ({ id, snippet }) => html`

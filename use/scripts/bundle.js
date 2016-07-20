@@ -3347,6 +3347,53 @@ module.exports = [
 ]
 
 },{}],47:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.playlistItems.list?part=contentDetails%252Csnippet&playlistId=PLTbXjF9OlqUyx_2H3UHc2n7HnKzMg2KKy&fields=items(contentDetails%252FvideoId%252Csnippet%252Ftitle)&_h=11&
+
+exports.default = Promise.resolve({
+  items: [{
+    snippet: {
+      title: 'Kagamine Rin, Kagamine Len - Childish War (おこちゃま戦争)'
+    },
+    contentDetails: {
+      videoId: 'pywNi6gD1FA'
+    }
+  }, {
+    snippet: {
+      title: '[Happy Hardcore] - nanobii - Rainbow Road [Monstercat Release]'
+    },
+    contentDetails: {
+      videoId: 'a0Aauep0VWs'
+    }
+  }, {
+    snippet: {
+      title: 'Does Your Mom Know You\'re a Noob - Bob ft. Meow'
+    },
+    contentDetails: {
+      videoId: 'TiBnUfW86EE'
+    }
+  }, {
+    snippet: {
+      title: 'SPICY CHOCOLATE - ずっと feat. HAN-KUN & TEE（黒島結菜主演）'
+    },
+    contentDetails: {
+      videoId: 'PYb2Lc7WQ78'
+    }
+  }, {
+    snippet: {
+      title: 'DECO*27 - Stickybug feat. Hatsune Miku / おじゃま虫 feat.初音ミク'
+    },
+    contentDetails: {
+      videoId: 'wv2P0PLz9fw'
+    }
+  }]
+});
+
+},{}],48:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3388,7 +3435,7 @@ exports.default = Promise.resolve({
   }]
 });
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3403,42 +3450,74 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = new _eventBus2.default();
 
-},{"./lib/event-bus":52}],49:[function(require,module,exports){
+},{"./lib/event-bus":54}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = Index;
 
 var _yoYo = require('yo-yo');
 
 var _yoYo2 = _interopRequireDefault(_yoYo);
 
+var _bus = require('../bus');
+
+var _bus2 = _interopRequireDefault(_bus);
+
 var _list = require('./list');
 
 var _list2 = _interopRequireDefault(_list);
 
+var _view = require('./view');
+
+var _view2 = _interopRequireDefault(_view);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function Index() {
-  return Promise.resolve().then(function () {
-    return (0, _list2.default)();
-  }).then(function (_resp) {
-    return _yoYo2.default`
+function Index(lists, items) {
+  const list = (0, _list2.default)(lists);
+  const view = (0, _view2.default)(items.shift());
+  initYouTube(items);
+
+  _bus2.default.listen('videochange', ({ item }) => _yoYo2.default.update(view, (0, _view2.default)(item)));
+
+  return _yoYo2.default`
   <div am-Content>
-    <aside am-List>${ _resp }</aside>
-    <div am-View></div>
+    <aside am-List>${ list }</aside>
+    <div am-View>${ view }</div>
   </div>
   `;
-  });
-};
+}
 
-},{"./list":50,"yo-yo":45}],50:[function(require,module,exports){
+function initYouTube(items) {
+  const script = document.createElement('script');
+  script.src = 'https://www.youtube.com/iframe_api';
+
+  const firstScript = document.getElementsByTagName('script')[0];
+  firstScript.parentNode.insertBefore(script, firstScript);
+
+  window.onYouTubeIframeAPIReady = _ => {
+    const yt = new YT.Player('player', {
+      events: {
+        onStateChange({ data }) {
+          if (data !== YT.PlayerState.ENDED) return;
+
+          _bus2.default.dispatch('videochange', { item: items.shift() });
+        }
+      }
+    });
+  };
+}
+
+},{"../bus":49,"./list":51,"./view":52,"yo-yo":45}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = List;
 
 var _yoYo = require('yo-yo');
 
@@ -3462,13 +3541,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const currentLocation = _history2.default.getCurrentLocation().pathname.slice(1);
 
-exports.default = function List() {
-  return Promise.resolve().then(function () {
-    return _list2.default;
-  }).then(function (_resp) {
-    const { items } = _resp;
-
-    return _yoYo2.default`
+function List({ items }) {
+  return _yoYo2.default`
     <nav onclick=${ emitHistory }>
       ${ items.map(({ id, snippet }) => _yoYo2.default`
         <a data-list=${ id } href=${ snippet.title }
@@ -3477,8 +3551,7 @@ exports.default = function List() {
       `) }
     </nav>
   `;
-  });
-};
+}
 
 function emitHistory(event) {
   event.preventDefault();
@@ -3495,7 +3568,35 @@ function emitHistory(event) {
   }
 }
 
-},{"../api/list":47,"../bus":48,"../history":51,"../util":54,"yo-yo":45}],51:[function(require,module,exports){
+},{"../api/list":48,"../bus":49,"../history":53,"../util":56,"yo-yo":45}],52:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = View;
+
+var _yoYo = require('yo-yo');
+
+var _yoYo2 = _interopRequireDefault(_yoYo);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function View({ snippet, contentDetails }) {
+  document.title = snippet.title;
+
+  return _yoYo2.default`
+    <div>
+      <h2>${ snippet.title }</h2>
+
+      <iframe src='http://www.youtube.com/embed/${ contentDetails.videoId }?enablejsapi=1&autoplay=1'
+        id=player frameborder=0
+      ></iframe>
+    </div>
+  `;
+}
+
+},{"yo-yo":45}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3506,7 +3607,7 @@ var _history = require('history');
 
 exports.default = (0, _history.createHistory)();
 
-},{"history":32}],52:[function(require,module,exports){
+},{"history":32}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3531,7 +3632,7 @@ class EventBus {
 }
 exports.default = EventBus;
 
-},{}],53:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 var _index = require('./components/index');
@@ -3548,11 +3649,30 @@ var _bus2 = _interopRequireDefault(_bus);
 
 require('dom-elements');
 
+var _list = require('./api/list');
+
+var _list2 = _interopRequireDefault(_list);
+
+var _item = require('./api/item');
+
+var _item2 = _interopRequireDefault(_item);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.player = function player({ el }) {
+  var _temp;
+
   return Promise.resolve().then(function () {
-    return (0, _index2.default)();
+    return Promise.resolve().then(function () {
+      return Promise.all([_list2.default, Promise.resolve().then(function () {
+        return _item2.default;
+      }).then(function (_resp) {
+        return _resp.items;
+      })]);
+    }).then(function (_resp) {
+      _temp = _resp;
+      return (0, _index2.default)(_temp[0], _temp[1]);
+    });
   }).then(function (_resp) {
     const view = _resp;
 
@@ -3562,7 +3682,7 @@ window.player = function player({ el }) {
 
 _bus2.default.listen('historychange', ({ pathname }) => _history2.default.push({ pathname }));
 
-},{"./bus":48,"./components/index":49,"./history":51,"dom-elements":5}],54:[function(require,module,exports){
+},{"./api/item":47,"./api/list":48,"./bus":49,"./components/index":50,"./history":53,"dom-elements":5}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3573,4 +3693,4 @@ function normalisePathname(pathname) {
   return pathname[0] === '/' ? pathname : '/' + pathname;
 }
 
-},{}]},{},[53]);
+},{}]},{},[55]);
