@@ -2,19 +2,17 @@ import html from 'yo-yo'
 import bus from '../bus'
 
 import List from './list'
-import View from './view'
 
 export default function Index( lists, items ) {
   const list = List( lists )
-  const view = View( items.shift() )
+  // const view = View( items.shift() )
   initYouTube( items )
 
-  bus.listen( 'videochange', ({ item }) => html.update(view, View(item)) )
+  // bus.listen( 'videochange', ({ item }) => html.update(view, View(item)) )
 
   return html`
   <div am-Content>
     <aside am-List>${ list }</aside>
-    <div am-View>${ view }</div>
   </div>
   `
 }

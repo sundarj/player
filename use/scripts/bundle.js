@@ -3352,46 +3352,131 @@ module.exports = [
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = getItems;
 // https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.playlistItems.list?part=contentDetails%252Csnippet&playlistId=PLTbXjF9OlqUyx_2H3UHc2n7HnKzMg2KKy&fields=items(contentDetails%252FvideoId%252Csnippet%252Ftitle)&_h=11&
 
-exports.default = Promise.resolve({
-  items: [{
-    snippet: {
-      title: 'Kagamine Rin, Kagamine Len - Childish War (おこちゃま戦争)'
-    },
-    contentDetails: {
-      videoId: 'pywNi6gD1FA'
-    }
-  }, {
-    snippet: {
-      title: '[Happy Hardcore] - nanobii - Rainbow Road [Monstercat Release]'
-    },
-    contentDetails: {
-      videoId: 'a0Aauep0VWs'
-    }
-  }, {
-    snippet: {
-      title: 'Does Your Mom Know You\'re a Noob - Bob ft. Meow'
-    },
-    contentDetails: {
-      videoId: 'TiBnUfW86EE'
-    }
-  }, {
-    snippet: {
-      title: 'SPICY CHOCOLATE - ずっと feat. HAN-KUN & TEE（黒島結菜主演）'
-    },
-    contentDetails: {
-      videoId: 'PYb2Lc7WQ78'
-    }
-  }, {
-    snippet: {
-      title: 'DECO*27 - Stickybug feat. Hatsune Miku / おじゃま虫 feat.初音ミク'
-    },
-    contentDetails: {
-      videoId: 'wv2P0PLz9fw'
-    }
-  }]
-});
+const RESPONSES = {
+  'PLTbXjF9OlqUxafW7FxLxPw0kN636aMrrl': {
+    items: [{
+      snippet: {
+        title: 'Deleted video'
+      },
+      contentDetails: {
+        videoId: 'IIH2tTuz8WQ'
+      }
+    }, {
+      snippet: {
+        title: '【初音ミク】SAYONARA【オリジナルMV】'
+      },
+      contentDetails: {
+        videoId: '7a9edHGg-44'
+      }
+    }, {
+      snippet: {
+        title: 'ゲスの極み乙女。 - ノーマルアタマ'
+      },
+      contentDetails: {
+        videoId: 'JSYe2ZYZdKU'
+      }
+    }, {
+      snippet: {
+        title: '【実話PV】去年の夏を超える想い出をアナタに!! 最強の青春爆裂夏ソング!! 夏なんて / WHITE JAM（クリーンver.）'
+      },
+      contentDetails: {
+        videoId: 'gAp6u8KBHqQ'
+      }
+    }, {
+      snippet: {
+        title: 'ウルフルズ『あーだこーだそーだ！』'
+      },
+      contentDetails: {
+        videoId: 'cKi52jYdmO4'
+      }
+    }]
+  },
+
+  'PLTbXjF9OlqUyx_2H3UHc2n7HnKzMg2KKy': {
+    items: [{
+      snippet: {
+        title: 'Kagamine Rin, Kagamine Len - Childish War (おこちゃま戦争)'
+      },
+      contentDetails: {
+        videoId: 'pywNi6gD1FA'
+      }
+    }, {
+      snippet: {
+        title: '[Happy Hardcore] - nanobii - Rainbow Road [Monstercat Release]'
+      },
+      contentDetails: {
+        videoId: 'a0Aauep0VWs'
+      }
+    }, {
+      snippet: {
+        title: 'Does Your Mom Know You\'re a Noob - Bob ft. Meow'
+      },
+      contentDetails: {
+        videoId: 'TiBnUfW86EE'
+      }
+    }, {
+      snippet: {
+        title: 'SPICY CHOCOLATE - ずっと feat. HAN-KUN & TEE（黒島結菜主演）'
+      },
+      contentDetails: {
+        videoId: 'PYb2Lc7WQ78'
+      }
+    }, {
+      snippet: {
+        title: 'DECO*27 - Stickybug feat. Hatsune Miku / おじゃま虫 feat.初音ミク'
+      },
+      contentDetails: {
+        videoId: 'wv2P0PLz9fw'
+      }
+    }]
+  },
+
+  'PLTbXjF9OlqUy6dbnoW32xiOBBYansoIvB': {
+    items: [{
+      snippet: {
+        title: '[Progressive House] - TwoThirds - Waking Dreams (feat. Laura Brehm) [Monstercat Release]'
+      },
+      contentDetails: {
+        videoId: 'eNF0VF9oTf8'
+      }
+    }, {
+      snippet: {
+        title: '[Electro] - Tut Tut Child - Eye of the Storm (feat. Laura Brehm) [Monstercat EP Release]'
+      },
+      contentDetails: {
+        videoId: '8TrMhR7ZpBk'
+      }
+    }, {
+      snippet: {
+        title: 'Laura Brehm - Cosmic Gravity'
+      },
+      contentDetails: {
+        videoId: 'HVFlMEZSiw0'
+      }
+    }, {
+      snippet: {
+        title: 'Laura Brehm - Fall in Love'
+      },
+      contentDetails: {
+        videoId: 'eBzD9VCaI1A'
+      }
+    }, {
+      snippet: {
+        title: 'Laura Brehm - The Sunrise'
+      },
+      contentDetails: {
+        videoId: 'L7StowX19aY'
+      }
+    }]
+  }
+};
+
+function getItems(playlistId) {
+  return Promise.all([].concat(playlistId).map(id => Promise.resolve(RESPONSES[id])));
+}
 
 },{}],48:[function(require,module,exports){
 "use strict";
@@ -3401,7 +3486,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 // https://www.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&mine=true&fields=items(id%2Csnippet(channelId%2Ctitle))&key={YOUR_API_KEY}
 
-exports.default = Promise.resolve({
+exports.default = _ => Promise.resolve({
   items: [{
     id: "PLTbXjF9OlqUxafW7FxLxPw0kN636aMrrl",
     snippet: {
@@ -3470,23 +3555,18 @@ var _list = require('./list');
 
 var _list2 = _interopRequireDefault(_list);
 
-var _view = require('./view');
-
-var _view2 = _interopRequireDefault(_view);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Index(lists, items) {
   const list = (0, _list2.default)(lists);
-  const view = (0, _view2.default)(items.shift());
+  // const view = View( items.shift() )
   initYouTube(items);
 
-  _bus2.default.listen('videochange', ({ item }) => _yoYo2.default.update(view, (0, _view2.default)(item)));
+  // bus.listen( 'videochange', ({ item }) => html.update(view, View(item)) )
 
   return _yoYo2.default`
   <div am-Content>
     <aside am-List>${ list }</aside>
-    <div am-View>${ view }</div>
   </div>
   `;
 }
@@ -3511,7 +3591,7 @@ function initYouTube(items) {
   };
 }
 
-},{"../bus":49,"./list":51,"./view":52,"yo-yo":45}],51:[function(require,module,exports){
+},{"../bus":49,"./list":51,"yo-yo":45}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3602,10 +3682,13 @@ function View({ snippet, contentDetails }) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.initial = undefined;
 
 var _history = require('history');
 
-exports.default = (0, _history.createHistory)();
+const history = (0, _history.createHistory)();
+exports.default = history;
+const initial = exports.initial = history.getCurrentLocation();
 
 },{"history":32}],54:[function(require,module,exports){
 'use strict';
@@ -3635,10 +3718,6 @@ exports.default = EventBus;
 },{}],55:[function(require,module,exports){
 'use strict';
 
-var _index = require('./components/index');
-
-var _index2 = _interopRequireDefault(_index);
-
 var _history = require('./history');
 
 var _history2 = _interopRequireDefault(_history);
@@ -3648,6 +3727,14 @@ var _bus = require('./bus');
 var _bus2 = _interopRequireDefault(_bus);
 
 require('dom-elements');
+
+var _index = require('./components/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _view = require('./components/view');
+
+var _view2 = _interopRequireDefault(_view);
 
 var _list = require('./api/list');
 
@@ -3659,30 +3746,42 @@ var _item2 = _interopRequireDefault(_item);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const push = Array.prototype.push;
+const urldecode = decodeURIComponent;
+const playlistItems = [];
+
 window.player = function player({ el }) {
-  var _temp;
-
   return Promise.resolve().then(function () {
-    return Promise.resolve().then(function () {
-      return Promise.all([_list2.default, Promise.resolve().then(function () {
-        return _item2.default;
-      }).then(function (_resp) {
-        return _resp.items;
-      })]);
-    }).then(function (_resp) {
-      _temp = _resp;
-      return (0, _index2.default)(_temp[0], _temp[1]);
-    });
+    return (0, _list2.default)();
   }).then(function (_resp) {
-    const view = _resp;
+    const lists = _resp;
 
-    el.appendChild(view);
-  });
+    const index = (0, _index2.default)(lists);
+    el.appendChild(index);
+
+    if (_history.initial.pathname !== '/') {
+      return Promise.resolve().then(function () {
+        return (0, _item2.default)(getPlaylistIDs(_history.initial, lists));
+      }).then(function (_resp) {
+        const playlistCollection = _resp;
+
+        playlistCollection.forEach(({ items }) => push.apply(playlistItems, items));
+
+        console.log(playlistItems);
+      });
+    }
+  }).then(function () {});
 };
 
 _bus2.default.listen('historychange', ({ pathname }) => _history2.default.push({ pathname }));
 
-},{"./api/item":47,"./api/list":48,"./bus":49,"./components/index":50,"./history":53,"dom-elements":5}],56:[function(require,module,exports){
+function getPlaylistIDs({ pathname }, { items }) {
+  const playlistTitle = urldecode(_history.initial.pathname.slice(1)).split(',');
+
+  return items.filter(({ snippet }) => playlistTitle.includes(snippet.title)).map(({ id }) => id);
+}
+
+},{"./api/item":47,"./api/list":48,"./bus":49,"./components/index":50,"./components/view":52,"./history":53,"dom-elements":5}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
