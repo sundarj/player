@@ -1,3 +1,6 @@
 import { createHistory } from 'history'
 
-export default createHistory()
+const history = createHistory()
+export default history
+
+export const initial = history.getCurrentLocation()
